@@ -5,7 +5,8 @@
     <form>
       <div class="mb-3">
         <label class="form-label">邮箱地址</label>
-        <validate-input :rules="emailRules"></validate-input>
+        <validate-input :rules="emailRules" v-model="emailValue"></validate-input>
+        <h1>{{emailValue}}</h1>
       </div>
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Email address</label>
@@ -26,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import ColumnList, { ColumnProps } from '@/components/ColumnList.vue'
 import GlobalHeader, { UserProps } from '@/components/GlobalHeader.vue'
@@ -82,6 +83,7 @@ export default defineComponent({
       error: false,
       message: ''
     })
+    const emailValue = ref('')
     const validateEmail = () => {
       console.log(emailRef.val)
       if (emailRef.val.trim() === '') {
@@ -101,7 +103,8 @@ export default defineComponent({
       user: currentUser,
       emailRef,
       validateEmail,
-      emailRules
+      emailRules,
+      emailValue
     }
   }
 })
