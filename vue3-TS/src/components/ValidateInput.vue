@@ -12,6 +12,7 @@
            :value="inputRef.val"
            @blur="validateInput"
            @input="updateValue"
+           v-bind="$attrs"
     >
     <span v-if="inputRef.error" class="invalid-feedback">{{inputRef.message}}</span>
   </div>
@@ -34,6 +35,7 @@ export default defineComponent({
     rules: Array as PropType<RulesProp>,
     modelValue: String
   },
+  inheritAttrs: false,
   setup(props, context) {
     const inputRef = reactive({
       val: '',
@@ -49,9 +51,9 @@ export default defineComponent({
       if (props.rules) {
         const allPassed = props.rules.every(rule => {
           let passed = true
-          console.log(rule)
+          // console.log(rule)
           inputRef.message = rule.message
-          console.log(rule.message)
+          // console.log(rule.message)
           switch (rule.type) {
             case 'required':
               passed = (inputRef.val.trim() !== '')
@@ -65,8 +67,9 @@ export default defineComponent({
           return passed
         })
         inputRef.error = !allPassed
+        return allPassed
       }
-      return {}
+      return true
     }
     return {
       inputRef,

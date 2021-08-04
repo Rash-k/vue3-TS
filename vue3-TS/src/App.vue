@@ -2,27 +2,25 @@
   <div class="container">
     <global-header :user="user"></global-header>
 <!--    <column-list :list="list"></column-list>-->
-    <form>
+    <validate-form @form-submit="formSubmit">
       <div class="mb-3">
         <label class="form-label">邮箱地址</label>
-        <validate-input :rules="emailRules" v-model="emailValue"></validate-input>
-        <h1>{{emailValue}}</h1>
+        <validate-input :rules="emailRules" v-model="emailValue" placeholder="请输入邮箱地址" ref="inputRef"></validate-input>
+<!--        <h1>{{emailValue}}</h1>-->
       </div>
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Email address</label>
-        <input v-model="emailRef.val" @blur="validateEmail" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        <input v-model="emailRef.val" @blur="validateEmail" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="请输入邮箱地址">
         <div class="form-text" v-if="emailRef.error">{{emailRef.message}}</div>
       </div>
       <div class="mb-3">
         <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1">
+        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="请输入密码">
       </div>
-      <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-      </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+      <template v-slot:submit>
+        <button type="submit" class="btn btn-danger">提交</button>
+      </template>
+    </validate-form>
   </div>
 </template>
 
@@ -32,6 +30,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import ColumnList, { ColumnProps } from '@/components/ColumnList.vue'
 import GlobalHeader, { UserProps } from '@/components/GlobalHeader.vue'
 import ValidateInput, { RulesProp } from '@/components/ValidateInput.vue'
+import ValidateForm from '@/components/ValidateForm.vue'
 
 const currentUser: UserProps = {
   isLogin: true,
@@ -71,7 +70,8 @@ export default defineComponent({
   components: {
     // ColumnList,
     GlobalHeader,
-    ValidateInput
+    ValidateInput,
+    ValidateForm
   },
   setup () {
     const emailRules: RulesProp = [
@@ -83,9 +83,15 @@ export default defineComponent({
       error: false,
       message: ''
     })
+    const inputRef = ref<any>()
     const emailValue = ref('')
+    const formSubmit = (result: boolean) => {
+      // console.log('提交成功', result)
+      console.log(inputRef.value)
+      console.log('result', inputRef.value.validateInput())
+    }
     const validateEmail = () => {
-      console.log(emailRef.val)
+      // console.log(emailRef.val)
       if (emailRef.val.trim() === '') {
         emailRef.error = true
         emailRef.message = '不能为空'
@@ -104,7 +110,9 @@ export default defineComponent({
       emailRef,
       validateEmail,
       emailRules,
-      emailValue
+      emailValue,
+      formSubmit,
+      inputRef
     }
   }
 })
