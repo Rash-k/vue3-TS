@@ -43,6 +43,7 @@ export default defineComponent({
   name: 'ValidateInput',
   props: {
     rules: Array as PropType<RulesProp>,
+    user: Array as PropType<RulesProp>,
     modelValue: String
   },
   inheritAttrs: false,
