@@ -4,18 +4,7 @@
 <!--    <column-list :list="list"></column-list>-->
     <validate-form @form-submit="formSubmit">
       <div class="mb-3">
-        <label class="form-label">邮箱地址</label>
         <validate-input :rules="emailRules" v-model="emailValue" placeholder="请输入邮箱地址" ref="inputRef"></validate-input>
-<!--        <h1>{{emailValue}}</h1>-->
-      </div>
-      <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Email address</label>
-        <input v-model="emailRef.val" @blur="validateEmail" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="请输入邮箱地址">
-        <div class="form-text" v-if="emailRef.error">{{emailRef.message}}</div>
-      </div>
-      <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="请输入密码">
       </div>
       <template v-slot:submit>
         <button type="submit" class="btn btn-danger">提交</button>
@@ -83,12 +72,16 @@ export default defineComponent({
       error: false,
       message: ''
     })
+    const password = ref('')
+    const passwordRules: RulesProp = [
+      { type: 'required', message: '密码不能为空' }
+    ]
     const inputRef = ref<any>()
     const emailValue = ref('')
     const formSubmit = (result: boolean) => {
-      // console.log('提交成功', result)
-      console.log(inputRef.value)
-      console.log('result', inputRef.value.validateInput())
+      console.log('result=========', result)
+      // console.log(inputRef.value)
+      // console.log('result', inputRef.value.validateInput())
     }
     const validateEmail = () => {
       // console.log(emailRef.val)
@@ -112,7 +105,9 @@ export default defineComponent({
       emailRules,
       emailValue,
       formSubmit,
-      inputRef
+      inputRef,
+      passwordRules,
+      password
     }
   }
 })

@@ -6,6 +6,16 @@
 <!--    v-model="inputRef.val"-->
 <!--    @blur="validateInput"-->
 <!--    >-->
+    <label class="form-label">邮箱地址</label>
+    <input type="text"
+           class="form-control"
+           :class="{'is-invalid': inputRef.error}"
+           :value="inputRef.val"
+            @blur="validateInput"
+           @input="updateValue"
+           v-bind="$attrs"
+    >
+    <label class="form-label">密码</label>
     <input type="text"
            class="form-control"
            :class="{'is-invalid': inputRef.error}"
@@ -19,11 +29,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, PropType } from 'vue'
-
+import { defineComponent, reactive, PropType, onMounted } from 'vue'
+import { emitter } from './ValidateForm.vue'
 const emailReg = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 interface RuleProp {
-  type: 'required' | 'email';
+  type: 'required' | 'email' | 'user';
   message: string
 }
 
@@ -38,7 +48,7 @@ export default defineComponent({
   inheritAttrs: false,
   setup(props, context) {
     const inputRef = reactive({
-      val: '',
+      val: props.modelValue || '',
       error: false,
       message: ''
     })
@@ -71,6 +81,9 @@ export default defineComponent({
       }
       return true
     }
+    onMounted(() => {
+      emitter.emit('form-item-created', validateInput)
+    })
     return {
       inputRef,
       validateInput,
